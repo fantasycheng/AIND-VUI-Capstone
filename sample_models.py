@@ -133,7 +133,7 @@ def bidirectional_rnn_model(input_dim, units, output_dim=29):
     return model
 
 def final_model(input_dim, filters, kernel_size, conv_stride,
-    conv_border_mode, units, recur_layers, output_dim=29):
+    conv_border_mode, units, recur_layers, rnn_type='gru', output_dim=29):
     """ Build a deep network for speech 
     """
     # Main acoustic input
@@ -148,7 +148,7 @@ def final_model(input_dim, filters, kernel_size, conv_stride,
 
     rnn_input = bn_cnn
     for i in range(recur_layers):
-        rnn = Bidirectional(GRU(units, return_sequences=True,
+        rnn = Bidirectional(_get_rnn_type(rnn_type)(units, return_sequences=True,
                             implementation=2, name='rnn_'+str(i)))(rnn_input)
         bn_rnn = BatchNormalization(name='bn_rnn_'+str(i))(rnn)
         rnn_input = bn_rnn
@@ -199,13 +199,13 @@ def cnn_deep_cnn_model(input_dim, filters, kernel_size, conv_stride,
 
 def _get_rnn_type(rnn_type):
     if isinstance(rnn_type, str):
-        if cell_type == 'lstm':
+        if rnn_type == 'lstm':
             return LSTM
-        elif cell_type == 'gru':
+        elif rnn_type == 'gru':
             return GRU
-        elif cell_type == 'simple_rnn':
+        elif rnn_type == 'simple_rnn':
             return SimpleRNN
         else:
             raise NotImplementedError
     else:
-        return cell_type
+        return rnn_type
