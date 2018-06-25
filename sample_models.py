@@ -196,3 +196,16 @@ def cnn_deep_cnn_model(input_dim, filters, kernel_size, conv_stride,
         x, kernel_size, conv_border_mode, conv_stride)
     print(model.summary())
     return model
+
+def _get_rnn_type(rnn_type):
+    if isinstance(rnn_type, str):
+        if cell_type == 'lstm':
+            return LSTM
+        elif cell_type == 'gru':
+            return GRU
+        elif cell_type == 'simple_rnn':
+            return SimpleRNN
+        else:
+            raise NotImplementedError
+    else:
+        return cell_type
