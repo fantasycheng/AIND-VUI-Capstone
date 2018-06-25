@@ -164,7 +164,7 @@ def final_model(input_dim, filters, kernel_size, conv_stride,
     print(model.summary())
     return model
 
-def cnn_deep_cnn_model(input_dim, filters, kernel_size, conv_stride,
+def cnn_deep_rnn_model(input_dim, filters, kernel_size, conv_stride,
     conv_border_mode, units, recur_layers, rnn_type='gru', output_dim=29):
     """ Build a recurrent + convolutional network for speech 
     """
